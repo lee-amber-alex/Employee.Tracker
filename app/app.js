@@ -19,7 +19,30 @@ const mysql = require("mysql");
         if (err) throw err;
         start();
       });
-      
+
 function start() {
-    
-};
+  inquirer
+    .prompt({
+      name: "addInfo",
+      type: "list",
+      message: "What would you like to do?",
+      choices: [
+        { name: "Add Department", value: addDep},
+        { name: "Add Role", value: addRole},
+        { name: "Add Employee", value: addEmp},
+        { name: "View Department", value: viewDep},
+        { name: "View Employee", value: viewEmp},
+        { name: "Update Employee", value: updateEmp},
+      ],
+    })
+    .then(function(answer) {
+   
+    });
+}
+
+function addDep(){};
+function addRole(){};
+function addEmp(){};
+function viewEmp(){};
+function updateEmp(){};
+
