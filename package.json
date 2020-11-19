@@ -1,0 +1,23 @@
+{
+  "name": "employee.tracker",
+  "version": "1.0.0",
+  "description": "Track employee information",
+  "main": "sever.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lee-amber-alex/Employee.Tracker.git"
+  },
+  "author": "Amber Lee",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lee-amber-alex/Employee.Tracker/issues"
+  },
+  "homepage": "https://github.com/lee-amber-alex/Employee.Tracker#readme",
+  "dependencies": {
+    "inquirer": "^7.3.3",
+    "mysql": "^2.18.1"
+  }
+}
