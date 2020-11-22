@@ -13,7 +13,7 @@ CREATE TABLE department(
 CREATE TABLE roles(
   id INT NOT NULL AUTO_INCREMENT,
   roles VARCHAR(30) NOT NULL,
-  salary DECIMAL(10,4) NOT NULL,
+  -- salary DECIMAL(10,4) NOT NULL,
 --   dep_id INT not null
   primary key(id),
 );
@@ -25,3 +25,12 @@ CREATE TABLE employees(
 --   manager_id INT NOT NULL,
   primary key(id),
 );
+
+INSERT INTO department (dep_name)
+VALUES ("Engineering");
+
+INSERT INTO roles (roles)
+VALUES ("Engineer");
+
+INSERT INTO employees (full_name)
+VALUES ("Jane Doe");

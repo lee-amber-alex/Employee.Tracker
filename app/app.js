@@ -1,5 +1,6 @@
 const inquirer = require("inquirer");
 const mysql = require("mysql");
+require("dotenv").config();
 
 // const connection = mysql.createConnection({
 //   host: "localhost",
@@ -196,8 +197,11 @@ function updateEmp() {
       message: "Which Employee would you like to update?",
     })
     .then(function (answer) {
-      console.log(answer);
-      console.log("It worked!");
+      connection.query("SELECT * FROM employees", function (err, results) {
+        if (err) throw err;
+        // connection.query(
+        //   "UPDATE auctions SET ? WHERE ?",
+      });
     });
 }
 
