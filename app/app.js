@@ -156,9 +156,10 @@ function viewDep() {
       type: "input",
       message: "Which Department would you like to view?",
     })
-    .then(function (answer) {
-      console.log(answer);
-      console.log("It worked!");
+    .tthen(function (answer) {
+      connection.query("SELECT * FROM departments", function (err, results) {
+        if (err) throw err;
+      });
     });
 }
 function viewEmp() {
@@ -169,8 +170,9 @@ function viewEmp() {
       message: "Which Employee would you like to view?",
     })
     .then(function (answer) {
-      console.log(answer);
-      console.log("It worked!");
+      connection.query("SELECT * FROM employees", function (err, results) {
+        if (err) throw err;
+      });
     });
 }
 function viewRole() {
@@ -181,8 +183,9 @@ function viewRole() {
       message: "Which Employee would you like to view?",
     })
     .then(function (answer) {
-      console.log(answer);
-      console.log("It worked!");
+      connection.query("SELECT * FROM employees", function (err, results) {
+        if (err) throw err;
+      });
     });
 }
 function updateEmp() {
