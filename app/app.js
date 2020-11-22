@@ -26,42 +26,51 @@ function start() {
         "Add Employee",
         "View Department",
         "View Employee",
+        "View Roles",
         "Update Employee",
         "Exit",
       ],
     })
-    .then((answer)=>{
-       
-        console.log(answer);
-      switch (answer.action) {
+    .then((answer) => {
+      console.log(answer);
 
+      switch (answer.action) {
         case "Add Department":
-            addDep();
+          addDep();
 
           break;
 
         case "Add Role":
-            addRole();
+          addRole();
 
           break;
 
         case "Add Employee":
-            addEmp();
+          addEmp();
 
           break;
 
+        case "View Employee":
+          viewEmp();
+
+          break;
+
+        case "View Role":
+          viewRole();
+
+          break;
         case "View Department":
-            viewEmp();
+          viewDep();
 
           break;
 
         case "Update Employee":
-            updateEmp();
+          updateEmp();
 
           break;
 
         case "Exit":
-            endConnection();
+          connection.end();
 
           break;
       }
@@ -69,31 +78,124 @@ function start() {
 }
 
 function addDep() {
-    console.log("it works!");
-//   inquirer.prompt({}).then(function (answer) {});
+  inquirer
+    .prompt({
+      name: "addDep",
+      type: "input",
+      message: "What Department would you like to add?",
+    })
+    .then(function (answer) {
+      console.log(answer);
+      console.log("It worked!");
+      connection.query(
+        "INSERT INTO department SET ?",
+        {
+          dep_name: answer.addDep,
+        },
+        function (err) {
+          if (err) throw err;
+          console.log("Department created.");
+
+          start();
+        }
+      );
+    });
 }
 function addRole() {
-    console.log("it works!");
-//   inquirer.prompt({}).then(function (answer) {});
+  inquirer
+    .prompt({
+      name: "addRole",
+      type: "input",
+      message: "What Position would you like to add?",
+    })
+    .then(function (answer) {
+      console.log(answer);
+      console.log("It worked!");
+      connection.query(
+        "INSERT INTO roles SET ?",
+        {
+          roles: answer.addRole,
+        },
+        function (err) {
+          if (err) throw err;
+          console.log("Role created.");
+
+          start();
+        }
+      );
+    });
 }
 function addEmp() {
-    console.log("it works!");
-//   inquirer.prompt({}).then(function (answer) {});
+  inquirer
+    .prompt({
+      name: "addEmp",
+      type: "input",
+      message: "What Employee would you like to add?",
+    })
+    .then(function (answer) {
+      console.log(answer);
+      console.log("It worked!");
+      connection.query(
+        "INSERT INTO employees SET ?",
+        {
+          full_name: answer.addEmp,
+        },
+        function (err) {
+          if (err) throw err;
+          console.log("Employee added.");
+
+          start();
+        }
+      );
+    });
 }
 function viewDep() {
-    console.log("it works!");
-//   inquirer.prompt({}).then(function (answer) {});
+  inquirer
+    .prompt({
+      name: "viewDep",
+      type: "input",
+      message: "Which Department would you like to view?",
+    })
+    .then(function (answer) {
+      console.log(answer);
+      console.log("It worked!");
+    });
 }
 function viewEmp() {
-    console.log("it works!");
-//   inquirer.prompt({}).then(function (answer) {});
+  inquirer
+    .prompt({
+      name: "viewEmp",
+      type: "input",
+      message: "Which Employee would you like to view?",
+    })
+    .then(function (answer) {
+      console.log(answer);
+      console.log("It worked!");
+    });
+}
+function viewRole() {
+  inquirer
+    .prompt({
+      name: "viewRole",
+      type: "input",
+      message: "Which Employee would you like to view?",
+    })
+    .then(function (answer) {
+      console.log(answer);
+      console.log("It worked!");
+    });
 }
 function updateEmp() {
-    console.log("it works!");
-//   inquirer.prompt({}).then(function (answer) {});
+  inquirer
+    .prompt({
+      name: "updateEmp",
+      type: "input",
+      message: "Which Employee would you like to update?",
+    })
+    .then(function (answer) {
+      console.log(answer);
+      console.log("It worked!");
+    });
 }
-function endConnection(){
-    console.log("it works!");
-    connection.end();
-}
+
 start();
