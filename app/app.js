@@ -2,18 +2,18 @@ const inquirer = require("inquirer");
 const mysql = require("mysql");
 require("dotenv").config();
 
-// const connection = mysql.createConnection({
-//   host: "localhost",
-//   port: 3306,
-//   user: "root",
-//   password: "new_password",
-//   database: "cms_DB",
-// });
+const connection = mysql.createConnection({
+  host: "localhost",
+  port: DB_PORT,
+  user: DB_USER,
+  password: DB_PASSWORD,
+  database: DB_DB,
+});
 
-// connection.connect(function (err) {
-//   if (err) throw err;
-//   start();
-// });
+connection.connect(function (err) {
+  if (err) throw err;
+  start();
+});
 
 function start() {
   inquirer
@@ -84,6 +84,11 @@ function addDep() {
       name: "addDep",
       type: "input",
       message: "What Department would you like to add?",
+    },
+    {
+      name: "depManager",
+      type: "input",
+      message: "Who manages this department?",
     })
     .then(function (answer) {
       console.log(answer);
@@ -92,6 +97,7 @@ function addDep() {
         "INSERT INTO department SET ?",
         {
           dep_name: answer.addDep,
+          dep_manager: answer.depManager,
         },
         function (err) {
           if (err) throw err;
@@ -108,6 +114,11 @@ function addRole() {
       name: "addRole",
       type: "input",
       message: "What Position would you like to add?",
+    },
+    {
+      name: "depId",
+      type: "input",
+      message: "What is the Department ID?",
     })
     .then(function (answer) {
       console.log(answer);
@@ -116,6 +127,7 @@ function addRole() {
         "INSERT INTO roles SET ?",
         {
           roles: answer.addRole,
+          dep_id: answer.depId
         },
         function (err) {
           if (err) throw err;
@@ -132,7 +144,18 @@ function addEmp() {
       name: "addEmp",
       type: "input",
       message: "What Employee would you like to add?",
-    })
+    },
+    {
+      name: "roleId",
+      type: "input",
+      message: "What is the role ID?",
+    },
+    {
+      name: "managerID",
+      type: "input",
+      message: "What is the manager ID?",
+    },
+    )
     .then(function (answer) {
       console.log(answer);
       console.log("It worked!");
@@ -140,6 +163,8 @@ function addEmp() {
         "INSERT INTO employees SET ?",
         {
           full_name: answer.addEmp,
+          role_id: answer.roleId,
+          manager_id: answer.manager_id,
         },
         function (err) {
           if (err) throw err;
