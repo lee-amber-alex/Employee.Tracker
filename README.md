@@ -1,2 +1,36 @@
-# Employee.Tracker
+
+# Employee Tracker
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+      
+     
+## Description
+
 A database for managing a company's employees using node, inquirer, and MySQL.
+
+## Table of Contents
+ 
+* [Installation](#installation)
+* [Usage](#usage)
+* [Credits](#credits)
+* [License](#license)
+ 
+## Installation
+```
+npm i MySQL, inquirer and  dotenv.
+``` 
+
+## Usage
+Watch the Employee Tracker demo [here.](https://vimeo.com/485347766/4b513fa9fa)  
+
+![startpage](screenshots/startpage.png)
+
+## License
+This project is covered under the MIT License.
+ 
+
+
+## Questions
+- [Email](lee.amber.alex@gmail.com)
+- [Github Page](https://github.com/lee-amber-alex)
+ 
