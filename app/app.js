@@ -13,7 +13,7 @@ const connection = mysql.createConnection({
 
 connection.connect(function (err) {
   if (err) throw err;
-  console.log("it's working!");
+ 
   start();
 });
 
@@ -35,7 +35,7 @@ function start() {
       ],
     })
     .then((answer) => {
-      console.log(answer);
+      
 
       switch (answer.addInfo) {
         case "Add Department":
@@ -95,8 +95,7 @@ function addDep() {
       },
     ])
     .then(function (answer) {
-      console.log(answer);
-      console.log("It worked!");
+      
       connection.query(
         "INSERT INTO department SET ?",
         {
@@ -124,11 +123,17 @@ function addRole() {
         name: "depId",
         type: "input",
         message: "What is the Department ID?",
+        validate: function (answer) {
+          if (isNaN(answer)) {
+            return "ID must only contain numbers.";
+          } else {
+            return true
+          }
+        },
       },
     ])
     .then(function (answer) {
-      console.log(answer);
-      console.log("It worked!");
+      
       connection.query(
         "INSERT INTO roles SET ?",
         {
@@ -156,22 +161,35 @@ function addEmp() {
         name: "roleId",
         type: "input",
         message: "What is the role ID?",
+        validate: function (answer) {
+          if (isNaN(answer)) {
+            return "ID must only contain numbers.";
+          } else {
+            return true
+          }
+        },
       },
       {
         name: "managerID",
         type: "input",
         message: "What is the manager ID?",
+        validate: function (answer) {
+          if (isNaN(answer)) {
+            return "ID must only contain numbers.";
+          } else {
+            return true
+          }
+        },
       },
     ])
     .then(function (answer) {
-      console.log(answer);
-      console.log("It worked!");
+      
       connection.query(
         "INSERT INTO employees SET ?",
         {
           full_name: answer.addEmp,
           role_id: answer.roleId,
-          manager_id: answer.manager_id,
+          manager_id: answer.managerID,
         },
         function (err) {
           if (err) throw err;
@@ -183,23 +201,23 @@ function addEmp() {
     });
 }
 function viewDep() {
-  connection.query("SELECT * FROM departments", function (err, results) {
+  connection.query("SELECT * FROM department", function (err, department) {
     if (err) throw err;
-    console.table(results);
+    console.table(department);
     start();
   });
 }
 function viewEmp() {
-  connection.query("SELECT * FROM employees", function (err, results) {
+  connection.query("SELECT * FROM employees", function (err, employees) {
     if (err) throw err;
-    console.table(results);
+    console.table(employees);
     start();
   });
 }
 function viewRole() {
-  connection.query("SELECT * FROM roles", function (err, results) {
+  connection.query("SELECT * FROM roles", function (err, roles) {
     if (err) throw err;
-    console.table(results);
+    console.table(roles);
     start();
   });
 }
@@ -236,7 +254,7 @@ const rolesChoices = roles.map(role => ({ name: role.roles, value: role}))
             }
 
           );
-          console.log(answer);
+          
         });
     });
   });

@@ -14,7 +14,6 @@ CREATE TABLE department(
 CREATE TABLE roles(
   id INT NOT NULL AUTO_INCREMENT,
   roles VARCHAR(30) NOT NULL,
-  -- salary DECIMAL(10,4) NOT NULL,
   dep_id INT NOT NULL
   primary key(id),
 );
@@ -36,26 +35,3 @@ VALUES ("Engineer");
 INSERT INTO employees (full_name)
 VALUES ("Jane Doe");
 
--- https://www.w3schools.com/sql/sql_join.asp
-
-SELECT * FROM department;
-SELECT * FROM employees;
-
-
-SELECT full_name
-FROM employees
-INNER JOIN department ON employees.dep_id= department.id;
-
-
-SELECT 
-FROM 
-LEFT JOIN ____ ON ____.___Id = _____.id;
-
-
-SELECT 
-FROM 
-RIGHT JOIN ____ ON ____.____Id = ______.id;
-
-SELECT
-FROM
-OUTER JOIN _____ ON _____.____id = _______.id;
