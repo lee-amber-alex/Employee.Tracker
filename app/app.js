@@ -1,17 +1,19 @@
+require("dotenv").config();
 const inquirer = require("inquirer");
 const mysql = require("mysql");
-require("dotenv").config();
+require("console.table");
 
 const connection = mysql.createConnection({
   host: "localhost",
-  port: DB_PORT,
-  user: DB_USER,
-  password: DB_PASSWORD,
-  database: DB_DB,
+  port: process.env.DB_PORT,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DB,
 });
 
 connection.connect(function (err) {
   if (err) throw err;
+  console.log("it's working!");
   start();
 });
 
@@ -35,7 +37,7 @@ function start() {
     .then((answer) => {
       console.log(answer);
 
-      switch (answer.action) {
+      switch (answer.addInfo) {
         case "Add Department":
           addDep();
 
@@ -80,16 +82,18 @@ function start() {
 
 function addDep() {
   inquirer
-    .prompt({
-      name: "addDep",
-      type: "input",
-      message: "What Department would you like to add?",
-    },
-    {
-      name: "depManager",
-      type: "input",
-      message: "Who manages this department?",
-    })
+    .prompt([
+      {
+        name: "addDep",
+        type: "input",
+        message: "What Department would you like to add?",
+      },
+      {
+        name: "depManager",
+        type: "input",
+        message: "Who manages this department?",
+      },
+    ])
     .then(function (answer) {
       console.log(answer);
       console.log("It worked!");
@@ -110,16 +114,18 @@ function addDep() {
 }
 function addRole() {
   inquirer
-    .prompt({
-      name: "addRole",
-      type: "input",
-      message: "What Position would you like to add?",
-    },
-    {
-      name: "depId",
-      type: "input",
-      message: "What is the Department ID?",
-    })
+    .prompt([
+      {
+        name: "addRole",
+        type: "input",
+        message: "What Position would you like to add?",
+      },
+      {
+        name: "depId",
+        type: "input",
+        message: "What is the Department ID?",
+      },
+    ])
     .then(function (answer) {
       console.log(answer);
       console.log("It worked!");
@@ -127,7 +133,7 @@ function addRole() {
         "INSERT INTO roles SET ?",
         {
           roles: answer.addRole,
-          dep_id: answer.depId
+          dep_id: answer.depId,
         },
         function (err) {
           if (err) throw err;
@@ -140,22 +146,23 @@ function addRole() {
 }
 function addEmp() {
   inquirer
-    .prompt({
-      name: "addEmp",
-      type: "input",
-      message: "What Employee would you like to add?",
-    },
-    {
-      name: "roleId",
-      type: "input",
-      message: "What is the role ID?",
-    },
-    {
-      name: "managerID",
-      type: "input",
-      message: "What is the manager ID?",
-    },
-    )
+    .prompt([
+      {
+        name: "addEmp",
+        type: "input",
+        message: "What Employee would you like to add?",
+      },
+      {
+        name: "roleId",
+        type: "input",
+        message: "What is the role ID?",
+      },
+      {
+        name: "managerID",
+        type: "input",
+        message: "What is the manager ID?",
+      },
+    ])
     .then(function (answer) {
       console.log(answer);
       console.log("It worked!");
@@ -176,58 +183,61 @@ function addEmp() {
     });
 }
 function viewDep() {
-  inquirer
-    .prompt({
-      name: "viewDep",
-      type: "input",
-      message: "Which Department would you like to view?",
-    })
-    .tthen(function (answer) {
-      connection.query("SELECT * FROM departments", function (err, results) {
-        if (err) throw err;
-      });
-    });
+  connection.query("SELECT * FROM departments", function (err, results) {
+    if (err) throw err;
+    console.table(results);
+    start();
+  });
 }
 function viewEmp() {
-  inquirer
-    .prompt({
-      name: "viewEmp",
-      type: "input",
-      message: "Which Employee would you like to view?",
-    })
-    .then(function (answer) {
-      connection.query("SELECT * FROM employees", function (err, results) {
-        if (err) throw err;
-      });
-    });
+  connection.query("SELECT * FROM employees", function (err, results) {
+    if (err) throw err;
+    console.table(results);
+    start();
+  });
 }
 function viewRole() {
-  inquirer
-    .prompt({
-      name: "viewRole",
-      type: "input",
-      message: "Which Employee would you like to view?",
-    })
-    .then(function (answer) {
-      connection.query("SELECT * FROM employees", function (err, results) {
-        if (err) throw err;
-      });
-    });
+  connection.query("SELECT * FROM roles", function (err, results) {
+    if (err) throw err;
+    console.table(results);
+    start();
+  });
 }
 function updateEmp() {
-  inquirer
-    .prompt({
-      name: "updateEmp",
-      type: "input",
-      message: "Which Employee would you like to update?",
-    })
-    .then(function (answer) {
-      connection.query("SELECT * FROM employees", function (err, results) {
-        if (err) throw err;
-        // connection.query(
-        //   "UPDATE auctions SET ? WHERE ?",
-      });
-    });
-}
+  connection.query("SELECT * FROM employees", function (err, employees) {
+    if (err) throw err;
+    connection.query("SELECT * FROM roles", function (err, roles) {
+      if (err) throw err;
+const employeeChoices = employees.map(emp => ({ name: emp.full_name, value: emp})); 
+const rolesChoices = roles.map(role => ({ name: role.roles, value: role})) 
+      inquirer
+        .prompt([
+          {
+            name: "updateEmp",
+            type: "list",
+            message: "Which Employee id would you like to update?",
+            choices: employeeChoices,
+          },
+          {
+            name: "updateRole",
+            type: "list",
+            message: "What is the new role?",
+            choices:rolesChoices,
+          },
+        ])
+        .then(function (answer) {
+          connection.query(
+            "UPDATE employees SET role_id = ? WHERE id = ?",
+            [answer.updateRole.id, answer.updateEmp.id],
+            function (err) {
+              if (err) throw err;
+              console.log("Employee updated.");
+              start();
+            }
 
-start();
+          );
+          console.log(answer);
+        });
+    });
+  });
+}
