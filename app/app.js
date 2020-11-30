@@ -1,7 +1,9 @@
 require("dotenv").config();
 const inquirer = require("inquirer");
 const mysql = require("mysql");
+const chalk = require('chalk');
 require("console.table");
+
 
 const connection = mysql.createConnection({
   host: "localhost",
@@ -18,6 +20,7 @@ connection.connect(function (err) {
 });
 
 function start() {
+  
   inquirer
     .prompt({
       name: "addInfo",
