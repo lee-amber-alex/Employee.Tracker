@@ -1,9 +1,8 @@
 require("dotenv").config();
 const inquirer = require("inquirer");
 const mysql = require("mysql");
-const chalk = require('chalk');
+const chalk = require("chalk");
 require("console.table");
-
 
 const connection = mysql.createConnection({
   host: "localhost",
@@ -15,12 +14,11 @@ const connection = mysql.createConnection({
 
 connection.connect(function (err) {
   if (err) throw err;
- 
+
   start();
 });
 
 function start() {
-  
   inquirer
     .prompt({
       name: "addInfo",
@@ -34,12 +32,11 @@ function start() {
         "View Employee",
         "View Roles",
         "Update Employee",
+        "Delete Info",
         "Exit",
       ],
     })
     .then((answer) => {
-      
-
       switch (answer.addInfo) {
         case "Add Department":
           addDep();
@@ -61,7 +58,7 @@ function start() {
 
           break;
 
-        case "View Role":
+        case "View Roles":
           viewRole();
 
           break;
@@ -72,6 +69,11 @@ function start() {
 
         case "Update Employee":
           updateEmp();
+
+          break;
+
+        case "Delete Info":
+          deleteInfo();
 
           break;
 
@@ -98,7 +100,6 @@ function addDep() {
       },
     ])
     .then(function (answer) {
-      
       connection.query(
         "INSERT INTO department SET ?",
         {
@@ -107,7 +108,7 @@ function addDep() {
         },
         function (err) {
           if (err) throw err;
-          console.log("Department created.");
+          console.log(chalk.black.bgGreen.bold("Department created."));
 
           start();
         }
@@ -130,13 +131,12 @@ function addRole() {
           if (isNaN(answer)) {
             return "ID must only contain numbers.";
           } else {
-            return true
+            return true;
           }
         },
       },
     ])
     .then(function (answer) {
-      
       connection.query(
         "INSERT INTO roles SET ?",
         {
@@ -145,7 +145,7 @@ function addRole() {
         },
         function (err) {
           if (err) throw err;
-          console.log("Role created.");
+          console.log(chalk.black.bgGreen.bold("Role created."));
 
           start();
         }
@@ -168,7 +168,7 @@ function addEmp() {
           if (isNaN(answer)) {
             return "ID must only contain numbers.";
           } else {
-            return true
+            return true;
           }
         },
       },
@@ -180,13 +180,12 @@ function addEmp() {
           if (isNaN(answer)) {
             return "ID must only contain numbers.";
           } else {
-            return true
+            return true;
           }
         },
       },
     ])
     .then(function (answer) {
-      
       connection.query(
         "INSERT INTO employees SET ?",
         {
@@ -196,7 +195,7 @@ function addEmp() {
         },
         function (err) {
           if (err) throw err;
-          console.log("Employee added.");
+          console.log(chalk.black.bgGreen.bold("Employee added."));
 
           start();
         }
@@ -204,23 +203,23 @@ function addEmp() {
     });
 }
 function viewDep() {
-  connection.query("SELECT * FROM department", function (err, department) {
+  connection.query("SELECT * FROM department", function (err, results) {
     if (err) throw err;
-    console.table(department);
+    console.table(results);
     start();
   });
 }
 function viewEmp() {
-  connection.query("SELECT * FROM employees", function (err, employees) {
+  connection.query("SELECT * FROM employees", function (err, results) {
     if (err) throw err;
-    console.table(employees);
+    console.table(results);
     start();
   });
 }
 function viewRole() {
-  connection.query("SELECT * FROM roles", function (err, roles) {
+  connection.query("SELECT * FROM roles", function (err, results) {
     if (err) throw err;
-    console.table(roles);
+    console.table(results);
     start();
   });
 }
@@ -229,8 +228,14 @@ function updateEmp() {
     if (err) throw err;
     connection.query("SELECT * FROM roles", function (err, roles) {
       if (err) throw err;
-const employeeChoices = employees.map(emp => ({ name: emp.full_name, value: emp})); 
-const rolesChoices = roles.map(role => ({ name: role.roles, value: role})) 
+      const employeeChoices = employees.map((emp) => ({
+        name: emp.full_name,
+        value: emp,
+      }));
+      const rolesChoices = roles.map((role) => ({
+        name: role.roles,
+        value: role,
+      }));
       inquirer
         .prompt([
           {
@@ -243,7 +248,7 @@ const rolesChoices = roles.map(role => ({ name: role.roles, value: role}))
             name: "updateRole",
             type: "list",
             message: "What is the new role?",
-            choices:rolesChoices,
+            choices: rolesChoices,
           },
         ])
         .then(function (answer) {
@@ -252,13 +257,52 @@ const rolesChoices = roles.map(role => ({ name: role.roles, value: role}))
             [answer.updateRole.id, answer.updateEmp.id],
             function (err) {
               if (err) throw err;
-              console.log("Employee updated.");
+              console.log(chalk.black.bgGreen.bold("Employee updated."));
               start();
             }
-
           );
-          
         });
     });
   });
+}
+function deleteInfo() {
+  inquirer
+    .prompt([
+      {
+        name: "deleteTable",
+        type: "list",
+        message: "What information would you like to delete?",
+        choices: ["employees", "roles", "department"],
+      },
+    ])
+    .then(function (answer) {
+      connection.query(
+        "SELECT * FROM ?",
+        [answer.deleteTable],
+        function (err, results) {
+          if (err) throw err;
+          const deleteChoices = results.map((record) => ({
+            name: record.full_name || record.dep_name || record.roles,
+            value: record.id,
+          }));
+          inquirer
+            .prompt([
+              {
+                name: "deleteRecord",
+                type: "list",
+                message: "Which record would you like to delete?",
+                choices: deleteChoices,
+              },
+            ])
+            .then(({ deleteRecord }) => {
+              connection.query("DELETE FROM ? WHERE id = ?", [answer.deleteTable, deleteRecord], function(err, deleteResults){
+                if(err) throw err;
+                
+                console.log("Information deleted.")
+                start();
+              })
+            });
+        }
+      );
+    });
 }
