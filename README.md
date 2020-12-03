@@ -21,7 +21,7 @@ npm i MySQL, inquirer and  dotenv.
 ``` 
 
 ## Usage
-Watch the Employee Tracker demo [here.](https://vimeo.com/485347766/4b513fa9fa)  
+Watch the Employee Tracker demo [here.](https://vimeo.com/486627321/420ccdfb0e)  
 
 ![startpage](screenshots/startpage.png)
 

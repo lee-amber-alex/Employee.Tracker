@@ -276,6 +276,7 @@ function deleteInfo() {
       },
     ])
     .then(function (answer) {
+      console.log(answer);
       connection.query(
         "SELECT * FROM ?",
         [answer.deleteTable],
@@ -295,12 +296,16 @@ function deleteInfo() {
               },
             ])
             .then(({ deleteRecord }) => {
-              connection.query("DELETE FROM ? WHERE id = ?", [answer.deleteTable, deleteRecord], function(err, deleteResults){
-                if(err) throw err;
-                
-                console.log("Information deleted.")
-                start();
-              })
+              connection.query(
+                "DELETE FROM ? WHERE id = ?",
+                [answer.deleteTable, deleteRecord],
+                function (err, deleteResults) {
+                  if (err) throw err;
+
+                  console.log("Information deleted.");
+                  start();
+                }
+              );
             });
         }
       );
