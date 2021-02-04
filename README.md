@@ -6,7 +6,7 @@
      
 ## Description
 
-A database for managing a company's employees using node, inquirer, and MySQL.  This app solves the problem of having to keep paper records for each employee.
+A database for managing a company's employees.  This app solves the problem of having to keep paper records for each employee.  Technologies used: Node.js, Express, Inquirer.
 
 ## Table of Contents
  
